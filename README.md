@@ -12,111 +12,170 @@ _class:
  - invert
 -->
 
-# Deploy Marp to GitHub Pages
+# Java Lambda Expressions
 
-Presentations to Webpages: Instantly!
+Streamline Your Code: A Guide to Java Lambdas
 
-## What?
+## What is a Lambda?
 
-[Marp](https://marp.app/) lets you create HTML slides from markdown (like this!).
+A **lambda expression** is a short block of code which takes in parameters and returns a value.
 
-This presentation is both a [website](https://alexsci.com/marp-to-pages) and a [README.md](https://github.com/ralexander-phi/marp-to-pages/blob/main/README.md).
+- Simplifies code for single-use functions
+- Often used in functional programming styles
+- Helps eliminate boilerplate code
 
-## Why?
-
-Treat your presentation the same way you treat code.
-
-- Use git to track changes
-- Pull requests to collaborate
-- Deploy automatically
-- See a problem? Open an issue!
-
-## Setup
-
-Want to create your own?
-
-First, create a new repo [from the template repo](https://github.com/ralexander-phi/marp-to-pages).
-
-![](img/use-template.png)
-
-## Configure GitHub Pages
-
-Open your new repo and [setup publishing](https://help.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#choosing-a-publishing-source).
-
-You'll typically use `gh-pages` as the deploy branch.
-
-## Review Build
-
-Click on Actions tab and see if the build succeeded (it may take some time).
-
-![](img/click-actions.png)
-
-You should now see the generated files in the `gh-pages` branch.
-
-## View webpage
-
-Open your deployed webpage to see the content.
-
-Out of the box you should see `README.md` as `/index.html` and `/README.pdf`. Slides under `docs/` are also converted.
-
-## Running locally
-
-Locally you'll run commands like:
-
-```
-$ marp README.md -o build/README.pdf
+```java
+(parameter1, parameter2) -> expression
 ```
 
-or
+## Why Use Lambdas?
 
+- Makes code **more readable**
+- **Reduces verbosity** by eliminating unnecessary classes
+- Improves **code reusability**
+
+### Traditional Approach vs Lambda
+
+#### Traditional Anonymous Class:
+```java
+Comparator<Integer> comparator = new Comparator<Integer>() {
+    @Override
+    public int compare(Integer o1, Integer o2) {
+        return o1.compareTo(o2);
+    }
+};
 ```
-$ npx @marp-team/marp-cli@latest README.md -o build/README.pdf
+
+#### Using Lambda:
+```java
+Comparator<Integer> comparator = (o1, o2) -> o1.compareTo(o2);
 ```
 
-## As a workflow step
+## Anatomy of a Lambda Expression
 
-The workflow runs an equivalent step:
+A lambda expression is defined by three components:
 
+1. **Parameters**: `(parameter1, parameter2, ...)`
+2. **Arrow Operator**: `->`
+3. **Body**: `expression` or `{ statements }`
+
+Example:
+
+```java
+(int a, int b) -> a + b
 ```
-- name: Marp Build (README.pdf)
-  uses: docker://marpteam/marp-cli:v1.7.0
-  with:
-    args: README.md -o build/README.pdf
-  env:
-    MARP_USER: root:root
+
+## Functional Interfaces
+
+A lambda expression can only be used with **functional interfaces**.  
+A **functional interface** is an interface with **one abstract method**.
+
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void myMethod();
+}
 ```
 
-Note the `args` match the previous slide.
+#### Example with `Runnable`:
 
-## Customizing the build
+```java
+Runnable r = () -> System.out.println("Hello Lambda!");
+```
 
-Anything in the `build/` folder will be deployed to GitHub Pages.
+## Lambda in Collections
 
-You can copy extra files or run further processing steps using other tools.
+Lambdas can be used to process collections.
 
-## Learn more about Marp
+### Example: Filtering a List
 
-This is a good time to learn more about Marp. Here's some resources:
+```java
+List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+names.stream()
+     .filter(name -> name.startsWith("A"))
+     .forEach(System.out::println);
+```
 
-- [CommonMark](https://commonmark.org/)
-- [Cheat Sheet](https://commonmark.org/help/)
-- [Themes](https://github.com/marp-team/marp-core/tree/master/themes)
-- [CSS Themes](https://marpit.marp.app/theme-css)
-- [Directives](https://marpit.marp.app/directives)
-- [VS Code plugin](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode)
+### Output:
+```
+Alice
+```
 
-## Example Sites
+## Method References
 
-Known sites using this action are:
+Simplify lambdas further using **method references**:
 
-- [University of Illinois at Urbana-Champaign's CS 199 Even More Practice](https://cs199emp.netlify.app/) [(code)](https://github.com/harsh183/emp-125)
-- [Exploring agent based models](https://roiarthurb.github.io/Talk-UMMISCO_06-07-2020/) [(code)](https://github.com/RoiArthurB/Talk-UMMISCO_06-07-2020)
+```java
+// Lambda
+list.forEach(s -> System.out.println(s));
 
-Send a [pull request](https://github.com/ralexander-phi/marp-to-pages) to get your site added.
+// Method Reference
+list.forEach(System.out::println);
+```
 
-## Publish your slides
+Use cases:
 
-When you are ready to share your presentation, commit or merge to `main` and your content on GitHub Pages will automatically update.
+- `ClassName::staticMethod`
+- `object::instanceMethod`
+- `ClassName::new` (Constructor reference)
+
+## Real-World Example: Sorting
+
+### Traditional Sorting:
+
+```java
+List<String> list = Arrays.asList("D", "B", "A");
+Collections.sort(list, new Comparator<String>() {
+    public int compare(String s1, String s2) {
+        return s1.compareTo(s2);
+    }
+});
+```
+
+### With Lambdas:
+
+```java
+list.sort((s1, s2) -> s1.compareTo(s2));
+```
+
+### With Method Reference:
+
+```java
+list.sort(String::compareTo);
+```
+
+## Use Cases for Lambdas
+
+- Sorting Collections
+- Event handling in GUI applications
+- Filtering and transforming data streams
+- Runnable tasks in multithreading
+
+## Common Mistakes
+
+- Using lambdas with non-functional interfaces
+- Misunderstanding scoping rules
+- Overcomplicating simple expressions
+
+## Practice Exercise
+
+1. Convert the following code to use a lambda:
+
+```java
+ActionListener listener = new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Button clicked!");
+    }
+};
+```
+
+2. Simplify using a method reference where possible.
+
+## Resources
+
+- [Java Lambda Basics](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html)
+- [Java Streams and Lambdas](https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html)
+- [Common Lambda Use Cases](https://www.baeldung.com/java-8-lambda-expressions-tips)
 
 # 🎉
 <!--
@@ -124,6 +183,4 @@ _class:
  - lead
  - invert
 -->
-### Hooray!
-
-
+### Now You're Ready for Lambdas!
